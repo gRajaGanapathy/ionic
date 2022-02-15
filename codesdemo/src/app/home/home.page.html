@@ -1,0 +1,51 @@
+<div class="row vh-100">
+	<div class="col-md-6 mx-auto col-12">
+		<ion-header>
+			<ion-title class="text-center py-2">Profile</ion-title>
+		</ion-header>
+
+		<ion-content padding>
+			<div #myswing1 swing-stack [stackConfig]="stackConfig" (throwoutleft)="voteUp(false)"
+				(throwoutright)="voteUp(true)" id="card-stack">
+				<ion-card>
+					<div #mycards1 *ngFor="let c of cards" swing-card>
+						<div class="custom_height">
+							<img *ngIf="c?.userImage" [src]="c?.userImage" class="w-100 border_radius disable_grab"
+								title="Profile Picture">
+						</div>
+						<ion-card-content>
+							<ion-card-title>
+								<h2>{{ c?.name }}</h2>
+							</ion-card-title>
+							<div class="col-md-12 view">
+								<p class="ms-1 mb-0">{{c?.age || '-'}}</p>
+								<p class="ms-1 mb-0">{{c?.height || '-'}}</p>
+								<p class="ms-1 mb-0">{{c?.Education || '-'}}</p>
+								<p class="ms-1 mb-0">{{c?.profession || '-'}}</p>
+								<p class="ms-1 mb-0">{{c?.zodiac_star || '-'}}</p>
+								<p class="ms-1 mb-0">{{c?.Religion || '-'}} - {{c?.caste || '-'}}</p>
+								<p class="ms-1 mb-0">{{c?.city || '-'}}</p>
+								<p class="ms-1 mb-0">{{c?.state || '-'}}</p>
+							</div>
+						</ion-card-content>
+						<ion-row>
+							<ion-col>
+								<ion-button color="danger" (click)="voteUp(false)">
+									<ion-icon name="thumbs-down"></ion-icon>
+									No
+								</ion-button>
+							</ion-col>
+							<ion-col>
+								<ion-button float-end color="success" (click)="voteUp(true)">
+									<ion-icon name="thumbs-up"></ion-icon>
+									Yes
+								</ion-button>
+							</ion-col>
+						</ion-row>
+					</div>
+				</ion-card>
+			</div>
+			<p>{{ recentCard }}</p>
+		</ion-content>
+	</div>
+</div>

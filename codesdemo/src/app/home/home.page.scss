@@ -1,0 +1,14 @@
+.border_radius{
+  border-top-left-radius: 0.55rem;
+  border-top-right-radius: 0.55rem;
+}
+.custom_height{
+  height: 350px;
+  overflow: hidden;
+}
+.disable_grab{
+  pointer-events: none;
+}
+.view {
+  display: contents;
+}
