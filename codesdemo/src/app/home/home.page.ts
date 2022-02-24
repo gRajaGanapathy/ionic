@@ -1,6 +1,6 @@
 import { Component, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { NavController } from '@ionic/angular';
+import { NavController, ToastController } from '@ionic/angular';
 import { StackConfig, SwingCardComponent, SwingStackComponent, ThrowEvent } from 'angular2-swing';
 import { HttpClient } from '@angular/common/http';
 
@@ -22,7 +22,7 @@ export class HomePage {
   members: any[];
   rate = 0;
 
-  constructor(public navCtrl: NavController, private http: HttpClient, public sanitizer: DomSanitizer) {
+  constructor(public navCtrl: NavController, private http: HttpClient, public sanitizer: DomSanitizer, public toastController: ToastController) {
     this.stackConfig = {
       throwOutConfidence: (offsetX, offsetY, element) => {
         return Math.min(Math.abs(offsetX) / (element.offsetWidth / 2), 1);
@@ -101,6 +101,17 @@ export class HomePage {
     } else {
       this.recentCard = 'You disliked: ' + JSON.stringify(removedCard.name);
     }
+    if (this.recentCard === 'You liked:') {
+      this.toastController.create({
+        message: "Interested",
+        duration: 3000
+      });
+    } else {
+      const toast = this.toastController.create({
+        message: "Not Interested!",
+        duration: 3000
+      });
+    }
   }
 
   // http://stackoverflow.com/questions/57803/how-to-convert-decimal-to-hex-in-javascript
@@ -115,14 +126,14 @@ export class HomePage {
     return hex;
   }
 
-  getUrl() {
+  getUrl(): any {
     if (this.cards[0].snippet.thumbnails != undefined) {
       return this.cards[0].snippet.thumbnails.high.url;
       //return this.sanitizer.bypassSecurityTrustResourceUrl("https://www.youtube.com/embed/"+ this.cards[0].id.videoId +"?autoplay=0");
     }
   }
 
-  handleratings(e) {
+  handleratings(e): void {
     this.rate = e;
   }
 

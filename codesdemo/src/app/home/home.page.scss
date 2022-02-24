@@ -3,7 +3,8 @@
   border-top-right-radius: 0.55rem;
 }
 .custom_height{
-  height: 350px;
+  min-height: 150px !important;
+  max-height: 320px !important;
   overflow: hidden;
 }
 .disable_grab{

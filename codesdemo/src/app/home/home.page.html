@@ -5,7 +5,7 @@
 <ion-content class="ion-padding-vertical">
 	<ion-grid>
 		<ion-row>
-			<ion-col size-sm="12" size-md="6" offset-md="3" size-xl="2" offset-md="5">
+			<ion-col size-sm="12" size-md="6" offset-md="3" size-xl="2" offset-xl="5">
 				<div #myswing1 swing-stack [stackConfig]="stackConfig" (throwoutleft)="voteUp(false)"
 					(throwoutright)="voteUp(true)" id="card-stack">
 					<ion-card>
@@ -14,20 +14,16 @@
 								<img *ngIf="c?.userImage" [src]="c?.userImage" class="w-100 border_radius disable_grab"
 									title="Profile Picture">
 							</div>
-							<ion-card-content>
-								<ion-card-title>
-									<h2>{{ c?.name }}</h2>
-								</ion-card-title>
-								<div class="col-md-12 view">
-									<p class="ms-1 mb-0">{{c?.age || '-'}}</p>
-									<p class="ms-1 mb-0">{{c?.height || '-'}}</p>
-									<p class="ms-1 mb-0">{{c?.Education || '-'}}</p>
-									<p class="ms-1 mb-0">{{c?.profession || '-'}}</p>
-									<p class="ms-1 mb-0">{{c?.zodiac_star || '-'}}</p>
-									<p class="ms-1 mb-0">{{c?.Religion || '-'}} - {{c?.caste || '-'}}</p>
-									<p class="ms-1 mb-0">{{c?.city || '-'}}</p>
-									<p class="ms-1 mb-0">{{c?.state || '-'}}</p>
-								</div>
+							<h5 class="ion-padding-horizontal ion-margin-top ion-no-margin">{{ c?.name }}</h5>
+							<ion-card-content class="ion-padding-horizontal">
+								{{c?.age || '-'}}
+								{{c?.height || '-'}}
+								{{c?.Education || '-'}}
+								{{c?.profession || '-'}}
+								{{c?.zodiac_star || '-'}}
+								{{c?.Religion || '-'}} - {{c?.caste || '-'}}
+								{{c?.city || '-'}}
+								{{c?.state || '-'}}
 							</ion-card-content>
 							<ion-row>
 								<ion-col>
@@ -50,5 +46,5 @@
 		</ion-row>
 	</ion-grid>
 
-	<p>{{ recentCard }}</p>
+	<p class="ion-text-center ion-no-margin">{{ recentCard }}</p>
 </ion-content>
