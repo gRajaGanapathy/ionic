@@ -88,7 +88,7 @@ export class HomePage {
     });
   }
   // Connected through HTML
-  voteUp(like: boolean) {
+  voteUp(like: boolean): void {
     let removedCard = this.cards.pop();
     console.log('removedCard', removedCard);
     if (!removedCard) {
