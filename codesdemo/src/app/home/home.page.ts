@@ -1,6 +1,6 @@
 import { Component, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { NavController, ToastController } from '@ionic/angular';
+import { LoadingController, NavController, ToastController } from '@ionic/angular';
 import { StackConfig, SwingCardComponent, SwingStackComponent, ThrowEvent } from 'angular2-swing';
 import { HttpClient } from '@angular/common/http';
 
@@ -21,8 +21,11 @@ export class HomePage {
   currentCard: number = 0;
   members: any[];
   rate = 0;
+  showRestart = false;
 
-  constructor(public navCtrl: NavController, private http: HttpClient, public sanitizer: DomSanitizer, public toastController: ToastController) {
+  constructor(
+    public navCtrl: NavController, private http: HttpClient, public sanitizer: DomSanitizer,
+    public toastController: ToastController, private isLoading: LoadingController) {
     this.stackConfig = {
       throwOutConfidence: (offsetX, offsetY, element) => {
         return Math.min(Math.abs(offsetX) / (element.offsetWidth / 2), 1);
@@ -68,6 +71,7 @@ export class HomePage {
     console.log("Added Card ", count)
 
     this.cards.pop();
+    console.log('this.currentCard', this.currentCard)
     if (this.currentCard <= this.members.length) {
       let data = this.members[this.currentCard + 1];
       this.cards.push(data);
@@ -78,39 +82,75 @@ export class HomePage {
     }
 
   }
-  getUserList(): void {
-    this.http.get<any>('assets/profile.json').subscribe((data: any) => {
-      this.members = data.profile_details;
-      this.addNewCards(1);
+  async getUserList() {
+    await this.isLoading.create({
+      message: 'Loading data...',
+      spinner: 'crescent'
+    }).then((loading) => {
+      loading.present();
+      this.http.get<any>('assets/profile.json').subscribe((data: any) => {
+        this.members = data.profile_details;
+        setTimeout(() => {
+          loading.dismiss();
+        }, 500);
+        this.addNewCards(1);
 
-    }, error => {
-      console.log("error while calling api :  " + error)
+      }, error => {
+        setTimeout(() => {
+          loading.dismiss();
+        }, 500);
+        console.log("error while calling api :  " + error)
+      });
     });
   }
   // Connected through HTML
-  voteUp(like: boolean): void {
+  async voteUp(like: boolean): Promise<void> {
+    await this.isLoading.create({
+      message: 'Please wait...',
+      spinner: 'crescent'
+    }).then((loading) => {
+      loading.present();
+      setTimeout(() => {
+        loading.dismiss();
+      }, 500)
+    });
     let removedCard = this.cards.pop();
-    console.log('removedCard', removedCard);
-    if (!removedCard) {
-      this.getUserList();
-    }
-    this.rate = 0;
-    this.addNewCards(1);
-    if (like) {
-      this.recentCard = 'You liked: ' + JSON.stringify(removedCard.name);
-    } else {
-      this.recentCard = 'You disliked: ' + JSON.stringify(removedCard.name);
-    }
-    if (this.recentCard === 'You liked:') {
-      this.toastController.create({
-        message: "Interested",
-        duration: 3000
+    console.log('removedCard', removedCard)
+    console.log('memeneer', this.members.length, this.currentCard)
+    const length = this.members.length;
+    console.log('length', length)
+    if (this.currentCard === 13) {
+      this.showRestart = true;
+      const toast = await this.toastController.create({
+        message: 'You have completed the maximum swipeing Limit',
+        duration: 4000,
+        position: 'middle',
+        color: 'warning'
       });
+      toast.present();
     } else {
-      const toast = this.toastController.create({
-        message: "Not Interested!",
-        duration: 3000
-      });
+      this.rate = 0;
+      this.addNewCards(1);
+      if (like) {
+        this.recentCard = 'You liked: ' + JSON.stringify(removedCard.name);
+        const toast = await this.toastController.create({
+          message: "Interested",
+          duration: 3000,
+          position: 'top',
+          color: 'success'
+        });
+        toast.present();
+      } else {
+        this.recentCard = 'You disliked: ' + JSON.stringify(removedCard.name);
+        const toast = await this.toastController.create({
+          message: "Not Interested!",
+          duration: 3000,
+          position: 'top',
+          color: 'danger'
+        });
+        toast.present();
+      }
+
     }
   }
 
@@ -135,6 +175,17 @@ export class HomePage {
 
   handleratings(e): void {
     this.rate = e;
+  }
+  onClick() {
+    this.currentCard = 0;
+    this.getUserList();
+    // Either subscribe in controller or set in HTML
+    this.swingStack.throwin.subscribe((event: any) => {
+      event.target.style.background = '#ffffff';
+    });
+
+    this.cards = [];
+    this.showRestart = false;
   }
 
 }
