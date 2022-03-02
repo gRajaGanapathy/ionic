@@ -1,8 +1,16 @@
-<ion-header color="primary" class="ion-margin-top">
-	<ion-title color="primary" class="text-center py-2">Profile</ion-title>
-</ion-header>
-
-<ion-content class="ion-padding-vertical">
+<ion-content class="ion-padding-vertical ioncontent">
+	<ion-grid>
+		<ion-row>
+			<ion-col size-sm="12" size-md="6" offset-md="4" size-xl="4" offset-md="3" offset-xl="4">
+				<ion-row>
+					<ion-col size="12" class="d-flex">
+						<ion-icon name="arrow-back-outline" color="light" class="fs-4 my-auto"></ion-icon>
+						<ion-title color="light" class="py-2 fw-bold pe-0">Daily Recommendations</ion-title>
+					</ion-col>
+				</ion-row>
+			</ion-col>
+		</ion-row>
+	</ion-grid>
 	<ion-grid>
 		<ion-row>
 			<ion-col size-sm="12" size-md="6" offset-md="4" size-xl="4" offset-md="3" offset-xl="4">
@@ -14,8 +22,8 @@
 								<img *ngIf="c?.userImage" [src]="c?.userImage" class="w-100 border_radius disable_grab"
 									title="Profile Picture">
 							</div>
-							<h5 class="ion-padding-horizontal ion-margin-top ion-no-margin">{{ c?.name }}</h5>
 							<ion-card-content class="ion-padding-horizontal">
+							<h1 class="ion-margin-top ion-no-margin">{{ c?.name }}</h1>
 								{{c?.age || '-'}}
 								{{c?.height || '-'}}
 								{{c?.Education || '-'}}
@@ -26,23 +34,25 @@
 								{{c?.state || '-'}}
 							</ion-card-content>
 							<ion-row>
-								<ion-col>
-									<ion-button color="danger" (click)="voteUp(false)">
-										<ion-icon slot="start" name="thumbs-down"></ion-icon>
-										No
-									</ion-button>
+								<ion-col size-sm="4" size-md="4" size-xl="3"  size="12" (click)="voteUp('Shortlisted')"
+									class="d-flex ion-justify-content-start my-auto">
+									<ion-icon name="star-outline" class="fs-5 ms-2"></ion-icon>
+									<p class="ion-no-margin my-auto ms-2">Shortlisted</p>
 								</ion-col>
-								<ion-col class="ion-text-end">
-									<ion-button float-end color="success" (click)="voteUp(true)">
-										<ion-icon slot="start" name="thumbs-up"></ion-icon>
-										Yes
-									</ion-button>
+								<ion-col size-sm="8" size-md="8" size-xl="9" size="12" class="d-flex ion-justify-content-start my-auto">
+									<h5 class="ion-no-margin my-auto ms-2">Like her ?</h5>
+									<div class="rounded-pill border custom_width ms-2" (click)="voteUp(false)">
+										<ion-icon class="fs-2" name="close-outline"></ion-icon>
+									</div>
+									<ion-icon class="fs-2 ms-2 check_custom rounded-pill border"
+										name="checkmark-outline" (click)="voteUp(true)"></ion-icon>
 								</ion-col>
 							</ion-row>
 						</div>
 					</ion-card>
 				</div>
-				<ion-button *ngIf="showRestart" (click)="onClick()" expand="block"  color="dark" size="large" shape="round">
+				<ion-button *ngIf="showRestart" (click)="onClick()" expand="block" color="dark" size="large"
+					shape="round">
 					Restart
 				</ion-button>
 			</ion-col>

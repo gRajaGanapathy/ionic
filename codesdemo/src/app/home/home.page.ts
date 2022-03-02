@@ -104,7 +104,7 @@ export class HomePage {
     });
   }
   // Connected through HTML
-  async voteUp(like: boolean): Promise<void> {
+  async voteUp(like: any): Promise<void> {
     await this.isLoading.create({
       message: 'Please wait...',
       spinner: 'crescent'
@@ -131,13 +131,22 @@ export class HomePage {
     } else {
       this.rate = 0;
       this.addNewCards(1);
-      if (like) {
+      if (like === true) {
         this.recentCard = 'You liked: ' + JSON.stringify(removedCard.name);
         const toast = await this.toastController.create({
           message: "Interested",
           duration: 3000,
           position: 'top',
           color: 'success'
+        });
+        toast.present();
+      } else if(like === 'Shortlisted'){
+        this.recentCard = 'You Shortlisted: ' + JSON.stringify(removedCard.name);
+        const toast = await this.toastController.create({
+          message: "Shortlisted",
+          duration: 3000,
+          position: 'top',
+          color: 'warning'
         });
         toast.present();
       } else {
